@@ -17,10 +17,12 @@
 //
 
 using Foole.Mpq;
+using Mangos.DataStores;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mangos.DBCExtractor;
 
@@ -33,7 +35,7 @@ internal static class MainModule
     public static int MaxAreaID = -1;
     public static Dictionary<int, int> MapLiqTypes = new();
 
-    public static void Main()
+    public static async Task Main()
     {
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("DBC extractor by UniX");
@@ -93,6 +95,33 @@ internal static class MainModule
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Unable to extract DBC Files. Error: " + ex.Message);
         }
+        try
+        {
+            await ReadMapDBC();
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Unable to read Map.dbc! Error: " + ex.Message);
+        }
+        try
+        {
+            await ReadAreaTableDBC();
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Unable to read AreaTable.dbc! Error: " + ex.Message);
+        }
+        try
+        {
+            await ReadLiquidTypeTableDBC();
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Unable to read LiquidType.dbc! Error: " + ex.Message);
+        }
 
     // Try
     // ExtractMaps()
@@ -145,5 +174,64 @@ internal static class MainModule
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write(" Done.");
+    }
+
+    public static async Task ReadMapDBC()
+    {
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Reading Map.dbc");
+        Console.ForegroundColor = ConsoleColor.Gray;
+
+        DataStoreProvider dataprov = new DataStoreProvider();
+        var mapDBC = await dataprov.GetDataStoreAsync("Map.dbc");
+        for (int i = 0, loopTo = mapDBC.Rows - 1; i <= loopTo; i++)
+        {
+            MapIDs.Add(mapDBC.ReadInt(i, 0));
+            MapNames.Add(mapDBC.ReadString(i, 1));
+        }
+        Console.Write("Done! ({0} maps loaded)", mapDBC.Rows);
+    }
+
+    public static async Task ReadAreaTableDBC()
+    {
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Reading AreaTable.dbc");
+        Console.ForegroundColor = ConsoleColor.Gray;
+
+        DataStoreProvider dataprov = new DataStoreProvider();
+        var areaDBC = await dataprov.GetDataStoreAsync("AreaTable.dbc");
+
+        var maxID = -1;
+        for (int i = 0, loopTo = areaDBC.Rows - 1; i <= loopTo; i++)
+        {
+            var areaID = areaDBC.ReadInt(i, 0);
+            var areaFlags = areaDBC.ReadInt(i, 3);
+            MapAreas.Add(areaID, areaFlags);
+            if (areaID > maxID)
+            {
+                maxID = areaID;
+            }
+        }
+        MaxAreaID = maxID;
+        Console.Write("Done! ({0} areas loaded)", areaDBC.Rows);
+    }
+
+    public static async Task ReadLiquidTypeTableDBC()
+    {
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Reading LiquidType.dbc");
+        Console.ForegroundColor = ConsoleColor.Gray;
+
+        DataStoreProvider dataprov = new DataStoreProvider();
+        var liquidtypeDBC = await dataprov.GetDataStoreAsync("LiquidType.dbc");
+
+        for (int i = 0, loopTo = liquidtypeDBC.Rows - 1; i <= loopTo; i++)
+        {
+            MapLiqTypes.Add(liquidtypeDBC.ReadInt(i, 0), liquidtypeDBC.ReadInt(i, 3));
+        }
+        Console.Write("Done! ({0} LiqTypes loaded)", liquidtypeDBC.Rows);
     }
 }
