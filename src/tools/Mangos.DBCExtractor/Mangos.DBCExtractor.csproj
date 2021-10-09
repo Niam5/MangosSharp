@@ -10,5 +10,7 @@
   <ItemGroup>
     <PackageReference Include="MpqTool.netstandard" Version="1.0.0" />
   </ItemGroup>
-  
+  <ItemGroup>
+    <ProjectReference Include="..\..\server\Mangos.DataStores\Mangos.DataStores.csproj" />
+  </ItemGroup>
 </Project>

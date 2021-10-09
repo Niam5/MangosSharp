@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mangos.WoWFakeClient", "Man
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mangos.Zip", "Mangos.Zip\Mangos.Zip.csproj", "{9066B384-8B58-4700-B11D-175BB16FF153}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mangos.DataStores", "..\server\Mangos.DataStores\Mangos.DataStores.csproj", "{75F4BA31-3750-4095-8813-FED86420A675}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{9066B384-8B58-4700-B11D-175BB16FF153}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9066B384-8B58-4700-B11D-175BB16FF153}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9066B384-8B58-4700-B11D-175BB16FF153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75F4BA31-3750-4095-8813-FED86420A675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75F4BA31-3750-4095-8813-FED86420A675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75F4BA31-3750-4095-8813-FED86420A675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75F4BA31-3750-4095-8813-FED86420A675}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
